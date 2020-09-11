@@ -1,0 +1,14 @@
+{
+  "description": "OctoSSO is a browser extension to assist GitHub's single sign-on feature",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ganta/octosso.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ganta/octosso/issues"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
