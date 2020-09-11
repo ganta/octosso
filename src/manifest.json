@@ -1,0 +1,21 @@
+{
+  "name": "OctoSSO",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "OctoSSO is a browser extension to assist GitHub's single sign-on feature",
+  "homepage_url": "https://github.com/ganta/octosso.git",
+  "icons": {
+    "48": "icons/icon.png",
+    "96": "icons/icon@2x.png",
+    "144": "icons/icon@3x.png"
+  },
+  "permissions": ["https://github.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*"],
+      "js": ["js/content.js"],
+      "run_at": "document_end",
+      "all_frames": true
+    }
+  ]
+}
