@@ -3,3 +3,4 @@ node_modules/
 
 # Webpack build / generate output
 dist/
+*.zip
