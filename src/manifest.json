@@ -9,7 +9,6 @@
     "96": "icons/icon@2x.png",
     "144": "icons/icon@3x.png"
   },
-  "permissions": ["https://github.com/*"],
   "content_scripts": [
     {
       "matches": ["https://github.com/*"],
