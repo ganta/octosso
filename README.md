@@ -4,6 +4,13 @@ OctoSSO is a browser extension to assist GitHub's single sign-on feature.
 
 ![Description](description.svg)
 
+## Installation
+
+You can install OctoSSO from each web browser's store:
+
+- Google Chrome: [Chrome Web Store](https://chrome.google.com/webstore/detail/octosso/ngkigjcddendcidingmacfbbjnbbefff)
+- Mozilla Firefox: _pending review_
+
 ## What's the problem?
 
 Even if your session with the Identity Provider is valid, GitHub's single sign-on sessions expire frequently.
