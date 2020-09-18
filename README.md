@@ -9,7 +9,7 @@ OctoSSO is a browser extension to assist GitHub's single sign-on feature.
 You can install OctoSSO from each web browser's store:
 
 - Google Chrome: [Chrome Web Store](https://chrome.google.com/webstore/detail/octosso/ngkigjcddendcidingmacfbbjnbbefff)
-- Mozilla Firefox: _pending review_
+- Mozilla Firefox: [Mozilla Add-ons](https://addons.mozilla.org/ja/firefox/addon/octosso/)
 
 ## What's the problem?
 
