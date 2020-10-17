@@ -4,6 +4,7 @@
     "config:base"
   ],
   "labels": ["renovate"],
+  "automergeType": "branch", // automerge without Pull Requests
   "patch": {
     "automerge": true
   },
