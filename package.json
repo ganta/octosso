@@ -23,8 +23,8 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "4.8.1",
-    "@typescript-eslint/parser": "4.8.1",
+    "@typescript-eslint/eslint-plugin": "4.8.2",
+    "@typescript-eslint/parser": "4.8.2",
     "clean-webpack-plugin": "3.0.0",
     "copy-webpack-plugin": "6.3.2",
     "eslint": "7.14.0",
