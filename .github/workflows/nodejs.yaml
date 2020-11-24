@@ -3,7 +3,7 @@ name: Node.js CI
 on: push
 
 env:
-  node-version: 12.18.3
+  node-version: 12.20.0
 
 jobs:
   lint:
