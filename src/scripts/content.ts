@@ -74,7 +74,7 @@ function handleTopPage(): void {
 
 function handleNotificationPage(): void {
   const singleSignOnPromptListEl = document.querySelector<HTMLUListElement>(
-    "#js-repo-pjax-container div.notifications-list ul"
+    "#js-repo-pjax-container .js-check-all-container .note"
   );
   clickSingleSignOnPrompt(singleSignOnPromptListEl);
 }
