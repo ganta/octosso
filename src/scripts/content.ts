@@ -81,7 +81,7 @@ function handleNotificationPage(): void {
 
 function handleProfilePage(): void {
   const singleSignOnPromptListEl = document.querySelector<HTMLUListElement>(
-    "body.page-profile div.js-yearly-contributions div.Box ul"
+    "body.page-profile .js-yearly-contributions"
   );
   clickSingleSignOnPrompt(singleSignOnPromptListEl);
 }
