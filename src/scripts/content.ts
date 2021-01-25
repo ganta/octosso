@@ -57,7 +57,7 @@ function handleTopPage(): void {
   const dashboardEl = document.querySelector<HTMLElement>("#dashboard");
   const dashboardObserver = new MutationObserver((records, observer) => {
     const singleSignOnPromptListEl = document.querySelector<HTMLUListElement>(
-      "#dashboard div.js-recent-activity-container div.Box ul"
+      "#dashboard .js-recent-activity-container"
     );
     if (singleSignOnPromptListEl === null) return;
 
@@ -74,14 +74,14 @@ function handleTopPage(): void {
 
 function handleNotificationPage(): void {
   const singleSignOnPromptListEl = document.querySelector<HTMLUListElement>(
-    "#js-repo-pjax-container .js-check-all-container .note"
+    "#js-repo-pjax-container .js-check-all-container"
   );
   clickSingleSignOnPrompt(singleSignOnPromptListEl);
 }
 
 function handleProfilePage(): void {
   const singleSignOnPromptListEl = document.querySelector<HTMLUListElement>(
-    "body.page-profile div.js-yearly-contributions div.Box ul"
+    "body.page-profile .js-yearly-contributions"
   );
   clickSingleSignOnPrompt(singleSignOnPromptListEl);
 }
