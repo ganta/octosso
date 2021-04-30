@@ -15,7 +15,8 @@
       "fileMatch": ["^.tool-versions$"],
       "matchStrings": ["^nodejs (?<currentValue>.*)\\n"],
       "depNameTemplate": "nodejs/node",
-      "datasourceTemplate": "github-releases"
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "node"
     }
   ],
   "packageRules": [
