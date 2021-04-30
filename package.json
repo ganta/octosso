@@ -18,8 +18,8 @@
     "format": "prettier --write 'src/**/*.{js,ts,json}'",
     "lint": "npm-run-all eslint check-types",
     "lint:fix": "npm-run-all eslint:fix check-types format",
-    "prepack": "npm-run-all clean build",
-    "pack": "(cd dist && zip -r ../octosso.zip .)"
+    "prepackage": "npm-run-all clean build",
+    "package": "(cd dist && zip -r ../octosso.zip .)"
   },
   "dependencies": {},
   "devDependencies": {
