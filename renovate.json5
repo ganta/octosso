@@ -19,15 +19,18 @@
     }
   ],
   "packageRules": [
-    { // TODO: Remove clean-webpack-plugin once it supports webpack v5.
+    // TODO: Remove this setting when clean-webpack-plugin supports webpack v5.
+    {
       "matchPackageNames": ["webpack"],
       "allowedVersions": "< 5.0.0"
     },
-    { // TODO: Remove clean-webpack-plugin once it supports webpack v5.
+    // TODO: Remove this setting when clean-webpack-plugin supports webpack v5.
+    {
       "matchPackageNames": ["copy-webpack-plugin"],
       "allowedVersions": "< 7.0.0"
     },
-    { // TODO: Remove clean-webpack-plugin once it supports webpack v5.
+    // TODO: Remove this setting when clean-webpack-plugin supports webpack v5.
+    {
       "matchPackageNames": ["ts-loader"],
       "allowedVersions": "< 9.0.0"
     },
