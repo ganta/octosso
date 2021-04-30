@@ -22,7 +22,7 @@
       "allowedVersions": "< 9.0.0"
     },
     {
-      "depTypeList": ["devDependencies"],
+      "matchDepTypes": ["devDependencies"],
       "automerge": true
     }
   ]
