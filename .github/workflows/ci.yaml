@@ -1,12 +1,19 @@
 name: CI
 
-on: push
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
 
 jobs:
   npm-run:
     name: ${{ matrix.stage }}
 
     strategy:
+      fail-fast: false
+
       matrix:
         stage: [lint, package]
 
