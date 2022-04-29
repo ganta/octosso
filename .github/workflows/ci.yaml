@@ -15,22 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Read .tool-versions
-        id: tool
-        run: |
-          node_version=$(grep "^nodejs " .tool-versions | awk '{ print $2 }')
-          echo ::set-output name=node-version::${node_version}
-
       - uses: actions/setup-node@v3
         with:
-          node-version: ${{ steps.tool.outputs.node-version }}
-
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          node-version-file: .node-version
+          cache: npm
 
       - run: npm ci
 
