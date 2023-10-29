@@ -4,16 +4,16 @@ module.exports = {
     es6: true,
     browser: true,
     webextensions: true,
+    node: true,
   },
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    ecmaVersion: 2019,
+    ecmaVersion: "latest",
+    sourceType: "module",
     tsconfigRootDir: __dirname,
-    project: ["./tsconfig.eslint.json"],
+    project: ["./tsconfig.json", "./tsconfig.node.json"],
   },
-  plugins: [
-    "@typescript-eslint",
-  ],
+  plugins: ["@typescript-eslint"],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -21,4 +21,5 @@ module.exports = {
     "prettier",
   ],
   rules: {},
-}
+  reportUnusedDisableDirectives: true,
+};
