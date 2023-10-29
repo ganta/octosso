@@ -30,9 +30,8 @@ function isSingleSignOnPromptPage(): boolean {
 function clickSingleSignOnPrompt(promptListEl: HTMLUListElement | null) {
   if (promptListEl === null) return;
 
-  const singleSignOnAnchorEl = promptListEl.querySelector<HTMLAnchorElement>(
-    "a[href^='/orgs/']"
-  );
+  const singleSignOnAnchorEl =
+    promptListEl.querySelector<HTMLAnchorElement>("a[href^='/orgs/']");
 
   if (singleSignOnAnchorEl !== null) {
     singleSignOnAnchorEl.click();
@@ -40,9 +39,10 @@ function clickSingleSignOnPrompt(promptListEl: HTMLUListElement | null) {
 }
 
 function handleSingleSignOnPage(): void {
-  const singleSignOnContinueButtonEl = document.querySelector<
-    HTMLButtonElement
-    >("div.org-sso-panel > form > button");
+  const singleSignOnContinueButtonEl =
+    document.querySelector<HTMLButtonElement>(
+      "div.org-sso-panel > form > button",
+    );
 
   if (singleSignOnContinueButtonEl === null) return;
 
@@ -55,9 +55,9 @@ function handleTopPage(): void {
   // The single sign-on prompts are lazy-loaded at the top page,
   // so they need to be detected by MutationObserver before they can be retrieved.
   const dashboardEl = document.querySelector<HTMLElement>("#dashboard");
-  const dashboardObserver = new MutationObserver((records, observer) => {
+  const dashboardObserver = new MutationObserver((_records, observer) => {
     const singleSignOnPromptListEl = document.querySelector<HTMLUListElement>(
-      "#dashboard .js-recent-activity-container"
+      "#dashboard .js-recent-activity-container",
     );
     if (singleSignOnPromptListEl === null) return;
 
@@ -74,14 +74,14 @@ function handleTopPage(): void {
 
 function handleNotificationPage(): void {
   const singleSignOnPromptListEl = document.querySelector<HTMLUListElement>(
-    "#js-repo-pjax-container .js-check-all-container"
+    "#js-repo-pjax-container .js-check-all-container",
   );
   clickSingleSignOnPrompt(singleSignOnPromptListEl);
 }
 
 function handleProfilePage(): void {
   const singleSignOnPromptListEl = document.querySelector<HTMLUListElement>(
-    "body.page-profile .js-yearly-contributions"
+    "body.page-profile .js-yearly-contributions",
   );
   clickSingleSignOnPrompt(singleSignOnPromptListEl);
 }
