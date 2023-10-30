@@ -1,4 +1,4 @@
-# OctoSSO 
+# OctoSSO
 
 OctoSSO is a browser extension to assist GitHub's single sign-on feature.
 
