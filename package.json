@@ -23,7 +23,7 @@
     "package": "run-s --print-label clean build && tsx scripts/zip.ts octosso.zip dist"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.6.1",
+    "@biomejs/biome": "1.6.2",
     "@types/archiver": "6.0.2",
     "archiver": "6.0.2",
     "npm-run-all2": "6.1.2",
