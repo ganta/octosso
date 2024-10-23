@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@types/archiver": "6.0.2",
+    "@types/archiver": "6.0.3",
     "archiver": "7.0.1",
     "npm-run-all2": "7.0.0",
     "prettier": "3.3.3",
