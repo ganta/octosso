@@ -27,7 +27,7 @@
     "@types/archiver": "6.0.3",
     "archiver": "7.0.1",
     "npm-run-all2": "7.0.2",
-    "prettier": "3.5.2",
+    "prettier": "3.5.3",
     "rimraf": "6.0.1",
     "tsx": "4.19.3",
     "typescript": "5.8.2",
