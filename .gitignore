@@ -4,3 +4,7 @@ node_modules/
 # Webpack build / generate output
 dist/
 *.zip
+
+# Claude Code
+CLAUDE.local.md
+.claude/settings.local.json
