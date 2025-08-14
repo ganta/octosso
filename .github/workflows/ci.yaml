@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
 
       matrix:
-        stage: [lint, typecheck, package]
+        stage: [lint, typecheck, test, package]
 
     runs-on: ubuntu-24.04
 
