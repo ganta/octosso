@@ -45,18 +45,6 @@ function isSingleSignOnPromptPage(): boolean {
   return false;
 }
 
-function clickSingleSignOnPrompt(promptListEl: HTMLUListElement | null): void {
-  if (promptListEl === null) return;
-
-  const singleSignOnAnchorEl = promptListEl.querySelector<HTMLAnchorElement>(
-    "a[href^='/orgs/'][href$='/sso']",
-  );
-
-  if (singleSignOnAnchorEl !== null) {
-    singleSignOnAnchorEl.click();
-  }
-}
-
 function handleSingleSignOnPage(): void {
   const singleSignOnContinueButtonEl =
     document.querySelector<HTMLButtonElement>(
@@ -71,36 +59,44 @@ function handleSingleSignOnPage(): void {
 }
 
 function handleTopPage(): void {
-  // The single sign-on prompts are lazy-loaded at the top page,
-  // so they need to be detected by MutationObserver before they can be retrieved.
-  const dashboardEl = document.querySelector<HTMLElement>("#dashboard");
-  const dashboardObserver = new MutationObserver((_records, observer) => {
-    const singleSignOnPromptListEl = document.querySelector<HTMLUListElement>(
-      "#dashboard .js-recent-activity-container",
-    );
-    if (singleSignOnPromptListEl === null) return;
-
-    clickSingleSignOnPrompt(singleSignOnPromptListEl);
-
-    observer.disconnect();
-  });
-
-  if (dashboardEl) {
-    const config = { childList: true, subtree: true };
-    dashboardObserver.observe(dashboardEl, config);
-  }
+  singleSignOnWithBanner();
 }
 
 function handleNotificationPage(): void {
-  const singleSignOnPromptListEl = document.querySelector<HTMLUListElement>(
-    "#js-repo-pjax-container .js-check-all-container",
-  );
-  clickSingleSignOnPrompt(singleSignOnPromptListEl);
+  singleSignOnWithBanner();
 }
 
 function handleProfilePage(): void {
-  const singleSignOnPromptListEl = document.querySelector<HTMLUListElement>(
-    "body.page-profile .js-yearly-contributions",
+  singleSignOnWithBanner();
+}
+
+function singleSignOnWithBanner(): void {
+  // Wait for the banner to be added to the DOM using MutationObserver.
+  const bodyObserver = new MutationObserver((_records, observer) => {
+    const organizationName = getOrganizationNameFromSingleSignOnBanner();
+    if (organizationName === undefined) {
+      return;
+    }
+    observer.disconnect();
+    redirectToSingleSignOnPage(organizationName);
+  });
+
+  const config = { childList: true, subtree: true };
+  bodyObserver.observe(document.body, config);
+}
+
+function getOrganizationNameFromSingleSignOnBanner(): string | undefined {
+  const organizationName = document.querySelector<HTMLElement>(
+    "section[class^=GlobalSSOBanner] .BannerDescription > strong",
   );
-  clickSingleSignOnPrompt(singleSignOnPromptListEl);
+
+  return organizationName?.innerText;
+}
+
+function redirectToSingleSignOnPage(organizationName: string): void {
+  const currentPath = window.location.pathname;
+  const encodedCurrentPath = encodeURIComponent(currentPath);
+  const ssoPath = `/orgs/${organizationName}/sso?return_to=${encodedCurrentPath}`;
+
+  window.location.assign(ssoPath);
 }
