@@ -13,7 +13,10 @@
     "dev": "vite build --watch",
     "clean": "rimraf 'dist/*' '*.zip'",
     "build": "tsc && vite build",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "lint": "run-p --print-label 'lint:*'",
     "lint:biome": "biome lint .",
     "lint:prettier": "prettier --check .",
@@ -25,12 +28,15 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@types/archiver": "6.0.3",
+    "@types/node": "24.2.1",
     "archiver": "7.0.1",
+    "jsdom": "26.1.0",
     "npm-run-all2": "8.0.4",
     "prettier": "3.6.2",
     "rimraf": "6.0.1",
     "tsx": "4.20.3",
     "typescript": "5.9.2",
-    "vite": "6.3.5"
+    "vite": "6.3.5",
+    "vitest": "3.2.4"
   }
 }
