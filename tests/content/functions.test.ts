@@ -1,147 +1,110 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { run } from "../../src/content/functions";
 import {
-  isSingleSignOnPromptPage,
-  clickSingleSignOnPrompt,
-  handleSingleSignOnPage,
-  handleTopPage,
-  handleNotificationPage,
-  handleProfilePage,
-  initializeOctoSSO,
-} from "../../src/content/functions";
-import {
-  createListWithLink,
-  createMultipleOrgLinks,
   createSSOForm,
   flushMutationObserver,
-  createNotificationPageSetup,
-  createProfilePageSetup,
-  createDashboardSetup,
+  createSSOBanner,
 } from "../utils";
 
-describe("OctoSSO Content Script", () => {
+describe("run", () => {
+  let locationAssignSpy: ReturnType<typeof vi.fn>;
+
   beforeEach(() => {
     // setup: reset DOM
     document.body.innerHTML = "";
     document.body.className = "";
 
-    // setup: reset location to root
-    window.history.pushState({}, "", "/");
+    // setup: mock window.location.assign
+    locationAssignSpy = vi.fn();
+    vi.stubGlobal("location", {
+      ...window.location,
+      pathname: "/",
+      assign: locationAssignSpy,
+    });
   });
 
   afterEach(() => {
-    // cleanup: reset location
-    window.history.pushState({}, "", "/");
+    // cleanup: restore mocks
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
 
-  describe("isSingleSignOnPromptPage", () => {
-    it("should return true for organization SSO page", () => {
+  function setupMutationObserverSpies() {
+    const observeSpy = vi.spyOn(MutationObserver.prototype, "observe");
+    const disconnectSpy = vi.spyOn(MutationObserver.prototype, "disconnect");
+    return {
+      observeSpy,
+      disconnectSpy,
+      cleanup: () => {
+        observeSpy.mockRestore();
+        disconnectSpy.mockRestore();
+      },
+    };
+  }
+
+  describe("SSO prompt pages", () => {
+    it("should handle organization SSO page", () => {
       // setup
-      window.history.pushState(
-        {},
-        "",
-        "/orgs/example-org/sso?return_to=/some-page",
-      );
+      window.location.pathname = "/orgs/example-org/sso";
+      const { container } = createSSOForm({ buttonText: "Continue" });
+      document.body.appendChild(container);
 
       // exercise
-      const result = isSingleSignOnPromptPage();
+      run();
 
-      // verify
-      expect(result).toBe(true);
+      // verify: function runs without throwing
+      expect(() => run()).not.toThrow();
     });
 
-    it("should return false for SAML consume page", () => {
+    it("should not handle SAML consume page", () => {
       // setup
-      window.history.pushState({}, "", "/orgs/example-org/saml/consume");
+      window.location.pathname = "/orgs/example-org/saml/consume";
 
       // exercise
-      const result = isSingleSignOnPromptPage();
+      run();
 
-      // verify
-      expect(result).toBe(false);
+      // verify: no button should be clicked
+      expect(locationAssignSpy).not.toHaveBeenCalled();
     });
 
-    it("should return true for pages requiring SSO authentication", () => {
+    it("should handle pages requiring SSO authentication", () => {
       // setup
       document.body.classList.add("session-authentication");
       const orgSsoDiv = document.createElement("div");
       orgSsoDiv.className = "org-sso";
       document.body.appendChild(orgSsoDiv);
 
-      // exercise
-      const result = isSingleSignOnPromptPage();
-
-      // verify
-      expect(result).toBe(true);
-    });
-
-    it("should return false when no SSO indicators are present", () => {
-      // setup
-      window.history.pushState({}, "", "/some-other-page");
-
-      // exercise
-      const result = isSingleSignOnPromptPage();
-
-      // verify
-      expect(result).toBe(false);
-    });
-  });
-
-  describe("clickSingleSignOnPrompt", () => {
-    it("should click the SSO link when found", () => {
-      // setup
-      const { list: ul, clickSpy } = createListWithLink({
-        href: "/orgs/example-org/sso",
-      });
-
-      // exercise
-      clickSingleSignOnPrompt(ul);
-
-      // verify
-      expect(clickSpy).toHaveBeenCalled();
-    });
-
-    it("should handle null promptListEl gracefully", () => {
-      // setup: no setup needed
-
-      // exercise & verify
-      expect(() => clickSingleSignOnPrompt(null)).not.toThrow();
-    });
-
-    it("should not click if no SSO link is found", () => {
-      // setup
-      const { list: ul, clickSpy } = createListWithLink({
-        href: "/some-other-link",
-      });
-
-      // exercise
-      clickSingleSignOnPrompt(ul);
-
-      // verify
-      expect(clickSpy).not.toHaveBeenCalled();
-    });
-
-    it("should not click organization links that are not SSO links", () => {
-      // setup
-      const { list: ul, clickSpies } = createMultipleOrgLinks();
-
-      // exercise
-      clickSingleSignOnPrompt(ul);
-
-      // verify
-      expect(clickSpies.org).not.toHaveBeenCalled();
-      expect(clickSpies.repo).not.toHaveBeenCalled();
-      expect(clickSpies.members).not.toHaveBeenCalled();
-    });
-  });
-
-  describe("handleSingleSignOnPage", () => {
-    it("should click the Continue button when found", () => {
-      // setup
       const { container, clickSpy } = createSSOForm({ buttonText: "Continue" });
       document.body.appendChild(container);
 
       // exercise
-      handleSingleSignOnPage();
+      run();
+
+      // verify: Continue button should be clicked
+      expect(clickSpy).toHaveBeenCalled();
+    });
+
+    it("should not execute when no SSO indicators are present", () => {
+      // setup
+      window.location.pathname = "/some-other-page";
+
+      // exercise
+      run();
+
+      // verify
+      expect(locationAssignSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("SSO authentication pages", () => {
+    it("should click the Continue button when found", () => {
+      // setup
+      window.location.pathname = "/orgs/example-org/sso";
+      const { container, clickSpy } = createSSOForm({ buttonText: "Continue" });
+      document.body.appendChild(container);
+
+      // exercise
+      run();
 
       // verify
       expect(clickSpy).toHaveBeenCalled();
@@ -149,35 +112,38 @@ describe("OctoSSO Content Script", () => {
 
     it('should not click if button text is not "Continue"', () => {
       // setup
+      window.location.pathname = "/orgs/example-org/sso";
       const { container, clickSpy } = createSSOForm({ buttonText: "Cancel" });
       document.body.appendChild(container);
 
       // exercise
-      handleSingleSignOnPage();
+      run();
 
       // verify
       expect(clickSpy).not.toHaveBeenCalled();
     });
 
     it("should handle missing button gracefully", () => {
-      // setup: no setup needed (empty DOM)
+      // setup
+      window.location.pathname = "/orgs/example-org/sso";
+      // No button added
 
       // exercise & verify
-      expect(() => handleSingleSignOnPage()).not.toThrow();
+      expect(() => run()).not.toThrow();
     });
   });
 
-  describe("handleTopPage", () => {
-    it("should set up MutationObserver for dashboard", () => {
+  describe("top page", () => {
+    it("should set up MutationObserver for document.body", () => {
       // setup
-      const { dashboard, observerSpies } = createDashboardSetup();
-      document.body.appendChild(dashboard);
+      window.location.pathname = "/";
+      const observerSpies = setupMutationObserverSpies();
 
       // exercise
-      handleTopPage();
+      run();
 
       // verify
-      expect(observerSpies.observeSpy).toHaveBeenCalledWith(dashboard, {
+      expect(observerSpies.observeSpy).toHaveBeenCalledWith(document.body, {
         childList: true,
         subtree: true,
       });
@@ -186,241 +152,136 @@ describe("OctoSSO Content Script", () => {
       observerSpies.cleanup();
     });
 
-    it("should click SSO prompt when detected by observer and disconnect observer", async () => {
+    it("should redirect to SSO page when banner is detected", async () => {
       // setup
-      const { dashboard, observerSpies, addLazyContent } =
-        createDashboardSetup();
-      document.body.appendChild(dashboard);
+      window.location.pathname = "/";
+      const observerSpies = setupMutationObserverSpies();
+      const orgName = "test-org";
 
       // exercise: start observing
-      handleTopPage();
+      run();
 
-      // setup: simulate lazy-loaded content
-      const { container, clickSpy } = addLazyContent();
-
-      // exercise: trigger mutation
-      dashboard.appendChild(container);
+      // setup: simulate SSO banner being added
+      const banner = createSSOBanner({ orgName });
+      document.body.appendChild(banner);
 
       // wait for MutationObserver to process
       await flushMutationObserver();
 
       // verify
-      expect(clickSpy).toHaveBeenCalled();
+      expect(locationAssignSpy).toHaveBeenCalledWith(
+        `/orgs/${orgName}/sso?return_to=%2F`,
+      );
       expect(observerSpies.disconnectSpy).toHaveBeenCalled();
 
       // cleanup
       observerSpies.cleanup();
     });
 
-    it("should handle missing dashboard element gracefully", () => {
-      // setup: no setup needed (no dashboard element)
+    it("should handle missing banner gracefully", () => {
+      // setup
+      window.location.pathname = "/";
 
       // exercise & verify
-      expect(() => handleTopPage()).not.toThrow();
+      expect(() => run()).not.toThrow();
     });
 
-    it("should disconnect observer when activity container is found even without SSO links", async () => {
+    it("should not disconnect observer when banner is not found", async () => {
       // setup
-      const { dashboard, observerSpies } = createDashboardSetup();
-      document.body.appendChild(dashboard);
+      window.location.pathname = "/";
+      const observerSpies = setupMutationObserverSpies();
 
       // exercise: start observing
-      handleTopPage();
+      run();
 
-      // setup: simulate lazy-loaded content without SSO prompt
-      const container = document.createElement("div");
-      container.className = "js-recent-activity-container";
-      const ul = document.createElement("ul");
-      const regularLink = document.createElement("a");
-      regularLink.href = "/some-regular-link";
-
-      ul.appendChild(regularLink);
-      container.appendChild(ul);
-
-      // exercise: trigger mutation
-      dashboard.appendChild(container);
-
-      // wait for MutationObserver to process (microtask-based)
-      await flushMutationObserver();
-
-      // verify: disconnect should be called when activity container is found
-      expect(observerSpies.disconnectSpy).toHaveBeenCalled();
-
-      // cleanup
-      observerSpies.cleanup();
-    });
-
-    it("should not disconnect observer when activity container is never found", async () => {
-      // setup
-      const { dashboard, observerSpies } = createDashboardSetup();
-      document.body.appendChild(dashboard);
-
-      // exercise: start observing
-      handleTopPage();
-
-      // setup: simulate other content being added (not activity container)
+      // setup: simulate other content being added (not SSO banner)
       const otherContent = document.createElement("div");
       otherContent.className = "some-other-content";
-
-      // exercise: trigger mutation
-      dashboard.appendChild(otherContent);
+      document.body.appendChild(otherContent);
 
       // wait for MutationObserver to process (microtask-based)
       await flushMutationObserver();
 
-      // verify: disconnect should not be called since activity container was never found
+      // verify: disconnect should not be called since the banner was never found
       expect(observerSpies.disconnectSpy).not.toHaveBeenCalled();
+      expect(locationAssignSpy).not.toHaveBeenCalled();
 
       // cleanup
       observerSpies.cleanup();
     });
   });
 
-  describe("handleNotificationPage", () => {
-    it("should click SSO prompt in notification page", () => {
+  describe("notification page", () => {
+    it("should redirect to SSO page when banner is detected", async () => {
       // setup
-      const { container, clickSpy } = createNotificationPageSetup();
-      document.body.appendChild(container);
+      window.location.pathname = "/notifications";
+      const observerSpies = setupMutationObserverSpies();
+      const orgName = "test-org";
 
-      // exercise
-      handleNotificationPage();
+      // exercise: start observing
+      run();
+
+      // setup: simulate SSO banner being added
+      const banner = createSSOBanner({ orgName });
+      document.body.appendChild(banner);
+
+      // wait for MutationObserver to process
+      await flushMutationObserver();
 
       // verify
-      expect(clickSpy).toHaveBeenCalled();
-    });
+      expect(locationAssignSpy).toHaveBeenCalledWith(
+        `/orgs/${orgName}/sso?return_to=%2Fnotifications`,
+      );
+      expect(observerSpies.disconnectSpy).toHaveBeenCalled();
 
-    it("should handle missing elements gracefully", () => {
-      // setup: no setup needed (empty DOM)
-
-      // exercise & verify
-      expect(() => handleNotificationPage()).not.toThrow();
-    });
-  });
-
-  describe("handleProfilePage", () => {
-    it("should click SSO prompt in profile page", () => {
-      // setup
-      document.body.classList.add("page-profile");
-      const { contributionsContainer, clickSpy } = createProfilePageSetup();
-      document.body.appendChild(contributionsContainer);
-
-      // exercise
-      handleProfilePage();
-
-      // verify
-      expect(clickSpy).toHaveBeenCalled();
+      // cleanup
+      observerSpies.cleanup();
     });
 
     it("should handle missing elements gracefully", () => {
       // setup
-      document.body.classList.add("page-profile");
+      window.location.pathname = "/notifications";
 
       // exercise & verify
-      expect(() => handleProfilePage()).not.toThrow();
+      expect(() => run()).not.toThrow();
     });
   });
 
-  describe("initializeOctoSSO", () => {
-    it("should call handleSingleSignOnPage for SSO pages", () => {
-      // setup: set location
-      window.history.pushState({}, "", "/orgs/example-org/sso");
+  describe("profile page", () => {
+    it("should redirect to SSO page when banner is detected", async () => {
+      // setup
+      window.location.pathname = "/username";
+      document.body.classList.add("page-profile");
+      const observerSpies = setupMutationObserverSpies();
+      const orgName = "test-org";
 
-      // setup: create DOM elements using createSSOForm for consistent mocking
-      const { container } = createSSOForm({ buttonText: "Continue" });
-      document.body.appendChild(container);
+      // exercise: start observing
+      run();
 
-      // exercise
-      initializeOctoSSO();
+      // setup: simulate SSO banner being added
+      const banner = createSSOBanner({ orgName });
+      document.body.appendChild(banner);
 
-      // verify: Since we can't easily verify the click was called in this integration test,
-      // we verify that the function runs without throwing an error
-      expect(() => initializeOctoSSO()).not.toThrow();
-    });
-
-    it("should call handleTopPage for root path", () => {
-      // setup: set location
-      window.history.pushState({}, "", "/");
-
-      // setup: create dashboard element
-      const { dashboard, observerSpies } = createDashboardSetup();
-      document.body.appendChild(dashboard);
-
-      // exercise
-      initializeOctoSSO();
+      // wait for MutationObserver to process
+      await flushMutationObserver();
 
       // verify
-      expect(observerSpies.observeSpy).toHaveBeenCalled();
+      expect(locationAssignSpy).toHaveBeenCalledWith(
+        `/orgs/${orgName}/sso?return_to=%2Fusername`,
+      );
+      expect(observerSpies.disconnectSpy).toHaveBeenCalled();
 
       // cleanup
       observerSpies.cleanup();
     });
 
-    it("should call handleNotificationPage for notifications path", () => {
-      // setup: set location
-      window.history.pushState({}, "", "/notifications");
-
-      // setup: create DOM elements
-      const { container, clickSpy } = createNotificationPageSetup();
-      document.body.appendChild(container);
-
-      // exercise
-      initializeOctoSSO();
-
-      // verify
-      expect(clickSpy).toHaveBeenCalled();
-    });
-
-    it("should call handleProfilePage for profile pages", () => {
-      // setup: set location
-      window.history.pushState({}, "", "/username");
+    it("should handle missing elements gracefully", () => {
+      // setup
+      window.location.pathname = "/username";
       document.body.classList.add("page-profile");
 
-      // setup: create DOM elements
-      const { contributionsContainer, clickSpy } = createProfilePageSetup();
-      document.body.appendChild(contributionsContainer);
-
-      // exercise
-      initializeOctoSSO();
-
-      // verify
-      expect(clickSpy).toHaveBeenCalled();
-    });
-
-    it("should not execute any handler for unrelated pages", () => {
-      // setup: set location
-      window.history.pushState({}, "", "/some-other-page");
-
-      const { observerSpies } = createDashboardSetup();
-
-      // exercise
-      initializeOctoSSO();
-
-      // verify
-      expect(observerSpies.observeSpy).not.toHaveBeenCalled();
-
-      // cleanup
-      observerSpies.cleanup();
-    });
-
-    it("should prioritize handleTopPage over handleProfilePage when both conditions match", () => {
-      // setup: set location to root
-      window.history.pushState({}, "", "/");
-
-      // setup: add page-profile class to body (profile page condition)
-      document.body.classList.add("page-profile");
-
-      // setup: create dashboard element (for handleTopPage)
-      const { dashboard, observerSpies } = createDashboardSetup();
-      document.body.appendChild(dashboard);
-
-      // exercise
-      initializeOctoSSO();
-
-      // verify: handleTopPage should be called (observeSpy called), not handleProfilePage
-      expect(observerSpies.observeSpy).toHaveBeenCalled();
-
-      // cleanup
-      observerSpies.cleanup();
+      // exercise & verify
+      expect(() => run()).not.toThrow();
     });
   });
 });

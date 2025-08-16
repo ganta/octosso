@@ -1,4 +1,4 @@
-import { initializeOctoSSO } from "./functions";
+import { run } from "./functions";
 
-// Initialize OctoSSO when the content script loads
-initializeOctoSSO();
+// Run OctoSSO when the content script loads
+run();
