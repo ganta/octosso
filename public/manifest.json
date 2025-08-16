@@ -9,6 +9,11 @@
     "96": "icons/icon@2x.png",
     "144": "icons/icon@3x.png"
   },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{4713c1d3-4684-48d3-9e97-668c5b629ad3}"
+    }
+  },
   "content_scripts": [
     {
       "matches": ["https://github.com/*"],
