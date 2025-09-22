@@ -9,6 +9,7 @@
     "url": "https://github.com/ganta/octosso/issues"
   },
   "type": "module",
+  "packageManager": "pnpm@10.17.0",
   "scripts": {
     "dev": "vite build --watch",
     "clean": "rimraf 'dist/*' '*.zip'",
