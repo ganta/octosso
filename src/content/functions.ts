@@ -95,8 +95,9 @@ function getOrganizationNameFromSingleSignOnBanner(): string | undefined {
 
 function redirectToSingleSignOnPage(organizationName: string): void {
   const currentPath = window.location.pathname;
+  const encodedOrganizationName = encodeURIComponent(organizationName);
   const encodedCurrentPath = encodeURIComponent(currentPath);
-  const ssoPath = `/orgs/${organizationName}/sso?return_to=${encodedCurrentPath}`;
+  const ssoPath = `/orgs/${encodedOrganizationName}/sso?return_to=${encodedCurrentPath}`;
 
   window.location.assign(ssoPath);
 }
