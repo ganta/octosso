@@ -22,12 +22,12 @@
     "lint:biome": "biome lint .",
     "lint:prettier": "prettier --check .",
     "fix": "run-s --print-label 'fix:*'",
-    "fix:biome": "biome lint --apply .",
+    "fix:biome": "biome lint --write .",
     "fix:prettier": "prettier --write .",
     "package": "run-s --print-label clean build && tsx scripts/zip.ts octosso.zip dist"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.2.5",
     "@types/archiver": "6.0.3",
     "@types/node": "24.6.2",
     "archiver": "7.0.1",
