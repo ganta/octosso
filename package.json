@@ -29,7 +29,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.2.5",
     "@types/archiver": "6.0.3",
-    "@types/node": "24.7.1",
+    "@types/node": "24.7.2",
     "archiver": "7.0.1",
     "jsdom": "27.0.0",
     "npm-run-all2": "8.0.4",
