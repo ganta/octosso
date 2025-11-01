@@ -31,7 +31,7 @@
     "@types/archiver": "6.0.3",
     "@types/node": "24.8.1",
     "archiver": "7.0.1",
-    "jsdom": "27.0.0",
+    "jsdom": "27.0.1",
     "npm-run-all2": "8.0.4",
     "prettier": "3.6.2",
     "rimraf": "6.0.1",
