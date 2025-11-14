@@ -21,8 +21,8 @@ importers:
         specifier: 7.0.1
         version: 7.0.1
       jsdom:
-        specifier: 27.0.1
-        version: 27.0.1
+        specifier: 27.1.0
+        version: 27.1.0
       npm-run-all2:
         specifier: 8.0.4
         version: 8.0.4
@@ -43,9 +43,12 @@ importers:
         version: 7.1.12(@types/node@24.9.2)(tsx@4.20.6)
       vitest:
         specifier: 4.0.5
-        version: 4.0.5(@types/node@24.9.2)(jsdom@27.0.1)(tsx@4.20.6)
+        version: 4.0.5(@types/node@24.9.2)(jsdom@27.1.0)(tsx@4.20.6)
 
 packages:
+
+  '@acemir/cssom@0.9.23':
+    resolution: {integrity: sha512-2kJ1HxBKzPLbmhZpxBiTZggjtgCwKg1ma5RHShxvd6zgqhDEdEkzpiwe7jLkI2p2BrZvFCXIihdoMkl1H39VnA==}
 
   '@asamuzakjp/css-color@4.0.5':
     resolution: {integrity: sha512-lMrXidNhPGsDjytDy11Vwlb6OIGrT3CmLg3VWNFyWkLWtijKl7xjvForlh8vuj0SHGjgl4qZEQzUmYTeQA2JFQ==}
@@ -745,9 +748,9 @@ packages:
     resolution: {integrity: sha512-zptv57P3GpL+O0I7VdMJNBZCu+BPHVQUk55Ft8/QCJjTVxrnJHuVuX/0Bl2A6/+2oyR/ZMEuFKwmzqqZ/U5nPQ==}
     engines: {node: 20 || >=22}
 
-  jsdom@27.0.1:
-    resolution: {integrity: sha512-SNSQteBL1IlV2zqhwwolaG9CwhIhTvVHWg3kTss/cLE7H/X4644mtPQqYvCfsSrGQWt9hSZcgOXX8bOZaMN+kA==}
-    engines: {node: '>=20'}
+  jsdom@27.1.0:
+    resolution: {integrity: sha512-Pcfm3eZ+eO4JdZCXthW9tCDT3nF4K+9dmeZ+5X39n+Kqz0DDIABRP5CAEOHRFZk8RGuC2efksTJxrjp8EXCunQ==}
+    engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
     peerDependencies:
       canvas: ^3.0.0
     peerDependenciesMeta:
@@ -902,9 +905,6 @@ packages:
     resolution: {integrity: sha512-n2I0V0lN3E9cxxMqBCT3opWOiQBzRN7UG60z/WDKqdX2zHUS/39lezBcsckZFsV6fUTSnfqI7kHf60jDAPGKug==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
-
-  rrweb-cssom@0.8.0:
-    resolution: {integrity: sha512-guoltQEx+9aMf2gDZ0s62EcV8lsXR+0w8915TC3ITdn2YueuNjdAYh/levpU9nFaoChh9RUS5ZdQMrKfVEN9tw==}
 
   safe-buffer@5.1.2:
     resolution: {integrity: sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==}
@@ -1168,6 +1168,8 @@ packages:
     engines: {node: '>= 14'}
 
 snapshots:
+
+  '@acemir/cssom@0.9.23': {}
 
   '@asamuzakjp/css-color@4.0.5':
     dependencies:
@@ -1730,8 +1732,9 @@ snapshots:
     dependencies:
       '@isaacs/cliui': 8.0.2
 
-  jsdom@27.0.1:
+  jsdom@27.1.0:
     dependencies:
+      '@acemir/cssom': 0.9.23
       '@asamuzakjp/dom-selector': 6.7.4
       cssstyle: 5.3.3
       data-urls: 6.0.0
@@ -1741,7 +1744,6 @@ snapshots:
       https-proxy-agent: 7.0.6
       is-potential-custom-element-name: 1.0.1
       parse5: 8.0.0
-      rrweb-cssom: 0.8.0
       saxes: 6.0.0
       symbol-tree: 3.2.4
       tough-cookie: 6.0.0
@@ -1914,8 +1916,6 @@ snapshots:
       '@rollup/rollup-win32-x64-msvc': 4.53.1
       fsevents: 2.3.3
 
-  rrweb-cssom@0.8.0: {}
-
   safe-buffer@5.1.2: {}
 
   safe-buffer@5.2.1: {}
@@ -2049,7 +2049,7 @@ snapshots:
       fsevents: 2.3.3
       tsx: 4.20.6
 
-  vitest@4.0.5(@types/node@24.9.2)(jsdom@27.0.1)(tsx@4.20.6):
+  vitest@4.0.5(@types/node@24.9.2)(jsdom@27.1.0)(tsx@4.20.6):
     dependencies:
       '@vitest/expect': 4.0.5
       '@vitest/mocker': 4.0.5(vite@7.1.12(@types/node@24.9.2)(tsx@4.20.6))
@@ -2073,7 +2073,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 24.9.2
-      jsdom: 27.0.1
+      jsdom: 27.1.0
     transitivePeerDependencies:
       - jiti
       - less
