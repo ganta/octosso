@@ -33,7 +33,7 @@
     "archiver": "7.0.1",
     "jsdom": "27.2.0",
     "npm-run-all2": "8.0.4",
-    "prettier": "3.7.1",
+    "prettier": "3.7.2",
     "rimraf": "6.1.2",
     "tsx": "4.20.6",
     "typescript": "5.9.3",
