@@ -93,6 +93,30 @@ function getOrganizationNameFromSingleSignOnBanner(): string | undefined {
   return organizationName?.innerText;
 }
 
+function getSSOPath(): string | undefined {
+  const ssoBanner = document.querySelector<HTMLElement>(
+    "section[class^=GlobalSSOBanner]",
+  );
+  if (ssoBanner === null) {
+    return undefined;
+  }
+
+  const ssoItemsExpansionButton = document.querySelector<HTMLButtonElement>(
+    "section[class^=GlobalSSOBanner] button",
+  );
+
+  if (ssoItemsExpansionButton === null) {
+    const ssoButton = document.querySelector<HTMLAnchorElement>(
+      "section[class^=GlobalSSOBanner] a[type=button]",
+    );
+    if (ssoButton === null) {
+      return undefined;
+    }
+
+    return ssoButton.href;
+  }
+}
+
 function redirectToSingleSignOnPage(organizationName: string): void {
   const currentPath = window.location.pathname;
   const encodedOrganizationName = encodeURIComponent(organizationName);
