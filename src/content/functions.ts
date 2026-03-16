@@ -86,11 +86,16 @@ function singleSignOnWithBanner(): void {
 }
 
 function getOrganizationNameFromSingleSignOnBanner(): string | undefined {
-  const organizationName = document.querySelector<HTMLElement>(
-    "section[class^=GlobalSSOBanner] .BannerDescription > strong",
+  const ssoLink = document.querySelector<HTMLAnchorElement>(
+    'a[href*="/orgs/"][href*="/sso"]',
   );
 
-  return organizationName?.innerText;
+  if (ssoLink) {
+    const match = ssoLink.pathname.match(/^\/orgs\/([^/]+)\/sso/);
+    if (match) return match[1];
+  }
+
+  return undefined;
 }
 
 function redirectToSingleSignOnPage(organizationName: string): void {
