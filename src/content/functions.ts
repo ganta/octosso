@@ -135,7 +135,7 @@ function getOrganizationNameFromSingleSignOnBanner(): string | undefined {
   );
 
   for (const link of links) {
-    const match = link.pathname.match(/^\/orgs\/([^/]+)\/sso/);
+    const match = link.pathname.match(/^\/orgs\/([^/]+)\/sso$/);
     if (match) return match[1];
   }
 
