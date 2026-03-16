@@ -72,6 +72,7 @@ function handleProfilePage(): void {
 
 function singleSignOnWithBanner(): void {
   // Wait for the banner to be added to the DOM using MutationObserver.
+  let dropdownOpened = false;
   const bodyObserver = new MutationObserver((_records, observer) => {
     const organizationName = getOrganizationNameFromSingleSignOnBanner();
     if (organizationName !== undefined) {
@@ -79,16 +80,18 @@ function singleSignOnWithBanner(): void {
       redirectToSingleSignOnPage(organizationName);
       return;
     }
-    openSingleSignOnDropdown();
+    if (!dropdownOpened) {
+      dropdownOpened = openSingleSignOnDropdown();
+    }
   });
 
   const config = { childList: true, subtree: true };
   bodyObserver.observe(document.body, config);
 
-  openSingleSignOnDropdown();
+  dropdownOpened = openSingleSignOnDropdown();
 }
 
-function openSingleSignOnDropdown(): void {
+function openSingleSignOnDropdown(): boolean {
   const buttons = document.querySelectorAll<HTMLButtonElement>(
     'button[aria-haspopup="true"][aria-expanded="false"]',
   );
@@ -98,9 +101,10 @@ function openSingleSignOnDropdown(): void {
       "Single sign-on"
     ) {
       button.click();
-      break;
+      return true;
     }
   }
+  return false;
 }
 
 function getOrganizationNameFromSingleSignOnBanner(): string | undefined {
