@@ -74,15 +74,33 @@ function singleSignOnWithBanner(): void {
   // Wait for the banner to be added to the DOM using MutationObserver.
   const bodyObserver = new MutationObserver((_records, observer) => {
     const organizationName = getOrganizationNameFromSingleSignOnBanner();
-    if (organizationName === undefined) {
+    if (organizationName !== undefined) {
+      observer.disconnect();
+      redirectToSingleSignOnPage(organizationName);
       return;
     }
-    observer.disconnect();
-    redirectToSingleSignOnPage(organizationName);
+    openSingleSignOnDropdown();
   });
 
   const config = { childList: true, subtree: true };
   bodyObserver.observe(document.body, config);
+
+  openSingleSignOnDropdown();
+}
+
+function openSingleSignOnDropdown(): void {
+  const buttons = document.querySelectorAll<HTMLButtonElement>(
+    'button[aria-haspopup="true"][aria-expanded="false"]',
+  );
+  for (const button of buttons) {
+    if (
+      button.querySelector('span[data-component="text"]')?.textContent ===
+      "Single sign-on"
+    ) {
+      button.click();
+      break;
+    }
+  }
 }
 
 function getOrganizationNameFromSingleSignOnBanner(): string | undefined {
