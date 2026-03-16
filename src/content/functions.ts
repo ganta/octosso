@@ -130,12 +130,12 @@ function openSingleSignOnDropdown(): void {
  * Returns the slug string, or undefined if no matching link is found.
  */
 function getOrganizationNameFromSingleSignOnBanner(): string | undefined {
-  const ssoLink = document.querySelector<HTMLAnchorElement>(
+  const links = document.querySelectorAll<HTMLAnchorElement>(
     'a[href*="/orgs/"][href*="/sso"]',
   );
 
-  if (ssoLink) {
-    const match = ssoLink.pathname.match(/^\/orgs\/([^/]+)\/sso/);
+  for (const link of links) {
+    const match = link.pathname.match(/^\/orgs\/([^/]+)\/sso/);
     if (match) return match[1];
   }
 
