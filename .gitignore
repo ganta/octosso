@@ -8,3 +8,9 @@ dist/
 # Claude Code
 CLAUDE.local.md
 .claude/settings.local.json
+
+# AJE LOCAL ADDITIONS
+aje_sign_unlisted.sh
+DEV_BUILD.md
+*.xpi
+web-ext-artifacts/
