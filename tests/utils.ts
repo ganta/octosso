@@ -111,7 +111,11 @@ export function createSSOBanner({
   const strong = document.createElement("strong");
   strong.innerText = orgName;
 
+  const link = document.createElement("a");
+  link.href = `/orgs/${orgName}/sso`;
+
   description.appendChild(strong);
+  description.appendChild(link);
   section.appendChild(description);
 
   return section;
