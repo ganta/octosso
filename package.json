@@ -9,7 +9,7 @@
     "url": "https://github.com/ganta/octosso/issues"
   },
   "type": "module",
-  "packageManager": "pnpm@10.30.3",
+  "packageManager": "pnpm@10.32.1",
   "scripts": {
     "dev": "vite build --watch",
     "dev:firefox": "run-p --print-label dev webext:run:firefox",
