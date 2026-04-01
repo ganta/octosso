@@ -33,7 +33,7 @@
     "package": "run-s --print-label clean build && web-ext build"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.5",
+    "@biomejs/biome": "2.4.7",
     "@types/node": "24.11.0",
     "jsdom": "27.4.0",
     "npm-run-all2": "8.0.4",
